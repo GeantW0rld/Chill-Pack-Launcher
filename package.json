@@ -1,7 +1,7 @@
 {
     "name": "ChillPack-Launcher",
     "preductname": "ChillPack Launcher",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Launcher Mincraft pour le serveur ChillPack",
     "main": "src/app.js",
     "author": {
