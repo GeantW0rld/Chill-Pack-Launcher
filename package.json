@@ -1,11 +1,11 @@
 {
-    "name": "ChillPack Launcher",
+    "name": "ChillPack-Launcher",
     "preductname": "ChillPack Launcher",
     "version": "1.0.0",
     "description": "Launcher Mincraft pour le serveur ChillPack",
     "main": "src/app.js",
     "author": {
-        "name": "GeantWorld Studio",
+        "name": "luuxis, Inc. (Edited by GeantWorld Studio)",
         "email": "contact@geantworld.com",
         "url": "https://geantworld.com"
     },
