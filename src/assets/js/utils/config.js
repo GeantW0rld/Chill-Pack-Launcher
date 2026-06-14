@@ -8,8 +8,8 @@ const nodeFetch = require("node-fetch");
 const convert = require('xml-js');
 let url = pkg.user ? `${pkg.url}/${pkg.user}` : pkg.url
 
-let config = `${url}/config`;
-let articles = `${url}/articles`;
+let config = `${url}/launcher/config-launcher/config.json`;
+let news = `${url}/launcher/news-launcher/news.json`;
 
 class Config {
     GetConfig() {
@@ -31,12 +31,15 @@ class Config {
 
         for (let [name, data] of instances) {
             let instance = data
+            instance.name = name
             instancesList.push(instance)
         }
         return instancesList
     }
 
-    async getNews(config) {
+    async getNews() {
+        let config = await this.GetConfig() || {}
+
         if (config.rss) {
             return new Promise((resolve, reject) => {
                 nodeFetch(config.rss).then(async config => {
@@ -61,7 +64,7 @@ class Config {
             })
         } else {
             return new Promise((resolve, reject) => {
-                nodeFetch(articles).then(async config => {
+                nodeFetch(news).then(async config => {
                     if (config.status === 200) return resolve(config.json());
                     else return reject({ error: { code: config.statusText, message: 'server not accessible' } });
                 }).catch(error => {

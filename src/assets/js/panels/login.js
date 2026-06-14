@@ -45,6 +45,12 @@ class Login {
                 if (account_connect == 'cancel' || !account_connect) {
                     popupLogin.closePopup();
                     return;
+                } else if (account_connect.error) {
+                    popupLogin.openPopup({
+                        title: 'Erreur',
+                        content: account_connect.errorMessage || account_connect.error,
+                        options: true
+                    });
                 } else {
                     await this.saveData(account_connect)
                     popupLogin.closePopup();

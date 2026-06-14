@@ -97,7 +97,7 @@ class Home {
 
         socials.forEach(social => {
             social.addEventListener('click', e => {
-                shell.openExternal(e.target.dataset.url)
+                shell.openExternal(social.dataset.url)
             })
         });
     }
@@ -204,6 +204,9 @@ class Home {
         let configClient = await this.db.readData('configClient')
         let instance = await config.getInstanceList()
         let authenticator = await this.db.readData('accounts', configClient.account_selected)
+        if (authenticator && !authenticator.meta) {
+            authenticator.meta = { type: 'mojang' };
+        }
         let options = instance.find(i => i.name == configClient.instance_select)
 
         let playInstanceBTN = document.querySelector('.play-instance')
@@ -218,9 +221,9 @@ class Home {
             path: `${await appdata()}/${process.platform == 'darwin' ? this.config.dataDirectory : `.${this.config.dataDirectory}`}`,
             instance: options.name,
             version: options.loader.minecraft_version,
-            detached: configClient.launcher_config.closeLauncher == "close-all" ? false : true,
-            downloadFileMultiple: configClient.launcher_config.download_multi,
-            intelEnabledMac: configClient.launcher_config.intelEnabledMac,
+            detached: configClient?.launcher_config?.closeLauncher == "close-all" ? false : true,
+            downloadFileMultiple: configClient?.launcher_config?.download_multi || 5,
+            intelEnabledMac: configClient?.launcher_config?.intelEnabledMac || false,
 
             loader: {
                 type: options.loader.loader_type,
@@ -233,22 +236,43 @@ class Home {
             ignored: [...options.ignored],
 
             java: {
-                path: configClient.java_config.java_path,
+                path: configClient?.java_config?.java_path || null,
             },
 
             JVM_ARGS:  options.jvm_args ? options.jvm_args : [],
             GAME_ARGS: options.game_args ? options.game_args : [],
 
             screen: {
-                width: configClient.game_config.screen_size.width,
-                height: configClient.game_config.screen_size.height
+                width: configClient?.game_config?.screen_size?.width || 854,
+                height: configClient?.game_config?.screen_size?.height || 480
             },
 
             memory: {
-                min: `${configClient.java_config.java_memory.min * 1024}M`,
-                max: `${configClient.java_config.java_memory.max * 1024}M`
+                min: `${(configClient?.java_config?.java_memory?.min || 1) * 1024}M`,
+                max: `${(configClient?.java_config?.java_memory?.max || 2) * 1024}M`
             }
         }
+
+        const fs = require('fs');
+        const path = require('path');
+        const optionsTxtPath = path.join(opt.path, 'instances', opt.instance, 'options.txt');
+        
+        if (!fs.existsSync(path.dirname(optionsTxtPath))) {
+            fs.mkdirSync(path.dirname(optionsTxtPath), { recursive: true });
+        }
+        
+        let optionsContent = '';
+        if (fs.existsSync(optionsTxtPath)) {
+            optionsContent = fs.readFileSync(optionsTxtPath, 'utf-8');
+            if (optionsContent.includes('tutorialStep:')) {
+                optionsContent = optionsContent.replace(/tutorialStep:.*/g, 'tutorialStep:none');
+            } else {
+                optionsContent += '\ntutorialStep:none\n';
+            }
+        } else {
+            optionsContent = 'tutorialStep:none\n';
+        }
+        fs.writeFileSync(optionsTxtPath, optionsContent);
 
         launch.Launch(opt);
 
@@ -295,7 +319,7 @@ class Home {
 
         launch.on('data', (e) => {
             progressBar.style.display = "none"
-            if (configClient.launcher_config.closeLauncher == 'close-launcher') {
+            if (configClient?.launcher_config?.closeLauncher == 'close-launcher') {
                 ipcRenderer.send("main-window-hide")
             };
             new logger('Minecraft', '#36b030');
@@ -305,7 +329,7 @@ class Home {
         })
 
         launch.on('close', code => {
-            if (configClient.launcher_config.closeLauncher == 'close-launcher') {
+            if (configClient?.launcher_config?.closeLauncher == 'close-launcher') {
                 ipcRenderer.send("main-window-show")
             };
             ipcRenderer.send('main-window-progress-reset')
@@ -326,7 +350,7 @@ class Home {
                 options: true
             })
 
-            if (configClient.launcher_config.closeLauncher == 'close-launcher') {
+            if (configClient?.launcher_config?.closeLauncher == 'close-launcher') {
                 ipcRenderer.send("main-window-show")
             };
             ipcRenderer.send('main-window-progress-reset')

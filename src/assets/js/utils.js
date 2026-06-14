@@ -52,6 +52,13 @@ async function appdata() {
 async function addAccount(data) {
     let skin = false
     if (data?.profile?.skins[0]?.base64) skin = await new skin2D().creatHeadTexture(data.profile.skins[0].base64);
+    
+    // Prevent duplicate accounts on reload
+    let existingAccount = document.getElementById(data.ID);
+    if (existingAccount) {
+        existingAccount.remove();
+    }
+
     let div = document.createElement("div");
     div.classList.add("account");
     div.id = data.ID;

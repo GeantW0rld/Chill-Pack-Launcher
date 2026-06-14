@@ -1,17 +1,42 @@
-.login .container {
+/* Modern Glassmorphism Theme for Login */
+
+.modern-login, .modern-login * {
+    box-sizing: border-box;
+}
+
+.modern-login {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
+    width: 100%;
+    position: relative;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 70%);
+    animation: fadeIn 0.8s ease-out;
 }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ==========================================================================
+   LOGIN CARDS
+   ========================================================================== */
 
 .login-tabs {
     position: absolute;
-    padding: 15px;
-    background: var(--background);
-    border-radius: 15px;
+    padding: 3.5rem 4rem;
+    background: rgba(15, 15, 15, 0.65);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
     text-align: center;
-    min-width: 40%;
+    min-width: 45%;
+    max-width: 600px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .login-home,
@@ -19,32 +44,120 @@
 .login-AZauth,
 .login-AZauth-A2F {
     display: none;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* When displayed, we can add a small fade up in JS if we want, or just rely on display block */
+.login-tabs[style*="display: block"] {
+    animation: slideUpFade 0.4s ease forwards;
+}
+
+@keyframes slideUpFade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .login-text {
-    font-size: 1.3rem;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 2.5rem;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
-.connect,
-.cancel {
-    background: none;
-    color: var(--color);
-    border: solid 4px var(--element-color);
-    border-radius: 10px;
-    padding: 0.3rem 4rem;
-    font-size: inherit;
-    font-weight: bold;
-    margin: 15px 10px;
+/* ==========================================================================
+   INPUTS
+   ========================================================================== */
+
+.input-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
 }
 
 .input-login .email,
 .input-login .password,
 .A2F {
-    color: var(--color);
-    background: none;
-    border: solid 2px var(--element-color);
-    border-radius: 30px;
-    width: 50%;
-    padding: 0.4rem 1rem;
-    margin-top: 10px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    border-radius: 20px;
+    width: 80%;
+    font-size: 1.1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.input-login .email::placeholder,
+.input-login .password::placeholder,
+.A2F::placeholder {
+    color: rgba(255,255,255,0.4);
+}
+
+.input-login .email:focus,
+.input-login .password:focus,
+.A2F:focus {
+    outline: none;
+    border-color: #0fcf71;
+    background: rgba(0,0,0,0.6);
+    box-shadow: 0 0 15px rgba(15, 207, 113, 0.3);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+
+.login-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.connect,
+.cancel {
+    border-radius: 15px;
+    padding: 1rem 3.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.connect {
+    background: linear-gradient(135deg, #0fcf71 0%, #05a898 100%);
+    border: none;
+    color: #fff;
+    box-shadow: 0 5px 20px rgba(15, 207, 113, 0.3);
+}
+
+.connect:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(15, 207, 113, 0.5);
+    background: linear-gradient(135deg, #15eb82 0%, #07d1bd 100%);
+}
+
+.cancel {
+    background: rgba(255, 44, 44, 0.05);
+    color: #ff2c2c;
+    border: 1px solid rgba(255, 44, 44, 0.3);
+}
+
+.cancel:hover {
+    background: #ff2c2c;
+    color: #fff;
+    border-color: #ff2c2c;
+    box-shadow: 0 8px 25px rgba(255, 44, 44, 0.4);
+    transform: translateY(-2px);
 }

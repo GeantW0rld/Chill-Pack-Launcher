@@ -1,58 +1,69 @@
-<div class="container">
-    <div class="status-server">
-        <img class="server-status-icon" src="assets/images/icon/icon.png">
-        <div class="server-status-infos">
-            <div class="server-status-name">Minecraft</div>
-            <div class="server-status-text">operationeel - 0 ms</div>
+<div class="container modern-home">
+    <!-- Top Bar: Status Server & Socials -->
+    <div class="top-bar">
+        <div class="status-server">
+            <div class="status-indicator"></div>
+            <img class="server-status-icon" src="assets/images/icon/icon.png">
+            <div class="server-status-infos">
+                <div class="server-status-name">Minecraft</div>
+                <div class="server-status-text">operationeel - 0 ms</div>
+            </div>
+            <div class="status-player-count">
+                <div class="player-count">0</div>
+            </div>
         </div>
-        <div class="status-player-count">
-            <div class="player-count">0</div>
+
+        <!-- Social Buttons moved to the top next to status -->
+        <div class="top-socials">
+            <div data-url="https://discord.gg/s5qfPeWYgv" class="social-block tooltip" data-tooltip="Discord">
+                <div class="icon-discord icon-social"></div>
+            </div>
+            <div data-url="https://github.com/GeantW0rld" class="social-block tooltip" data-tooltip="GitHub">
+                <div class="icon-github icon-social"></div>
+            </div>
         </div>
     </div>
 
+
+
+    <!-- Main Content -->
     <div class="home-bottom">
+        <!-- News Section -->
         <div class="new-tab">
             <div class="titre-tab-new">Actualités</div>
             <div class="news-list content-scroll"></div>
         </div>
-        <div class="social-tab">
-            <div class="social-list content-scroll">
-                <div data-url="https://discord.gg/e9q7Yr2cuQ" class="social-block">
-                    <div class="icon-discord icon-social"></div>
-                </div>
+    </div>
 
-                <div data-url="https://github.com/luuxis" class="social-block">
-                    <div class="icon-github icon-social"></div>
-                </div>
+    <!-- Bottom Floating Dock -->
+    <div class="floating-dock sidebar">
+        <div class="dock-left">
+            <div class="player-options">
+                <div class="player-head"></div>
+            </div>
+        </div>
 
-                <div data-url="https://www.youtube.com/LuuxisHD" class="social-block">
-                    <div class="icon-youtube icon-social"></div>
+        <div class="dock-center">
+            <div class="play-elements">
+                <div class="play-instance">
+                    <button class="play-btn">Jouer</button>
+                    <div class="instance-select icon-arrow"></div>
+                </div>
+                <div class="info-starting-game">
+                    <div class="info-starting-game-text">Connexion...</div>
+                    <progress value="0" max="0" class="progress-bar"></progress>
                 </div>
             </div>
+        </div>
+
+        <div class="dock-right">
+            <div class="settings-btn icon-settings"></div>
         </div>
     </div>
 
-    <div class="sidebar">
-        <div class="player-options">
-            <div class="player-head"></div>
-        </div>
-
-        <div class="play-elements">
-            <div class="play-instance">
-                <button class="play-btn">Jouer</button>
-                <div class="instance-select icon-arrow"></div>
-            </div>
-            <div class="info-starting-game">
-                <div class="info-starting-game-text">Connexion...</div>
-                <progress value="0" max="0" class="progress-bar"></progress>
-            </div>
-        </div>
-
-        <div class="settings-btn icon-settings"></div>
-    </div>
-
+    <!-- Modals -->
     <div class="instance-popup">
-        <div class="instances-tab">
+        <div class="instances-tab glass-panel">
             <div class="close-popup icon-close"></div>
             <p>Choisissez votre instance...</p>
             <div class="instances-List"></div>

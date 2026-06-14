@@ -50,27 +50,12 @@ class Settings {
         document.querySelector('.accounts-list').addEventListener('click', async e => {
             let popupAccount = new popup()
             try {
-                let id = e.target.id
-                if (e.target.classList.contains('account')) {
-                    popupAccount.openPopup({
-                        title: 'Connexion',
-                        content: 'Veuillez patienter...',
-                        color: 'var(--color)'
-                    })
+                let accountElem = e.target.closest('.account');
+                let deleteElem = e.target.closest('.delete-profile');
+                let id;
 
-                    if (id == 'add') {
-                        document.querySelector('.cancel-home').style.display = 'inline'
-                        return changePanel('login')
-                    }
-
-                    let account = await this.db.readData('accounts', id);
-                    let configClient = await this.setInstance(account);
-                    await accountSelect(account);
-                    configClient.account_selected = account.ID;
-                    return await this.db.updateData('configClient', configClient);
-                }
-
-                if (e.target.classList.contains("delete-profile")) {
+                if (deleteElem) {
+                    id = deleteElem.id;
                     popupAccount.openPopup({
                         title: 'Connexion',
                         content: 'Veuillez patienter...',
@@ -79,19 +64,47 @@ class Settings {
                     await this.db.deleteData('accounts', id);
                     let deleteProfile = document.getElementById(`${id}`);
                     let accountListElement = document.querySelector('.accounts-list');
-                    accountListElement.removeChild(deleteProfile);
+                    if (deleteProfile) accountListElement.removeChild(deleteProfile);
 
-                    if (accountListElement.children.length == 1) return changePanel('login');
+                    // Add button might be the only child left
+                    if (accountListElement.children.length <= 1) {
+                        popupAccount.closePopup();
+                        return changePanel('login');
+                    }
 
                     let configClient = await this.db.readData('configClient');
 
                     if (configClient.account_selected == id) {
                         let allAccounts = await this.db.readAllData('accounts');
-                        configClient.account_selected = allAccounts[0].ID
-                        accountSelect(allAccounts[0]);
-                        let newInstanceSelect = await this.setInstance(allAccounts[0]);
-                        configClient.instance_select = newInstanceSelect.instance_select
-                        return await this.db.updateData('configClient', configClient);
+                        if (allAccounts && allAccounts.length > 0) {
+                            configClient.account_selected = allAccounts[0].ID
+                            accountSelect(allAccounts[0]);
+                            let newInstanceSelect = await this.setInstance(allAccounts[0]);
+                            configClient.instance_select = newInstanceSelect?.instance_select || null;
+                            await this.db.updateData('configClient', configClient);
+                        }
+                    }
+                } else if (accountElem) {
+                    id = accountElem.id;
+                    popupAccount.openPopup({
+                        title: 'Connexion',
+                        content: 'Veuillez patienter...',
+                        color: 'var(--color)'
+                    })
+
+                    if (id == 'add') {
+                        let cancelHome = document.querySelector('.cancel-home');
+                        if (cancelHome) cancelHome.style.display = 'inline';
+                        popupAccount.closePopup();
+                        return changePanel('login')
+                    }
+
+                    let account = await this.db.readData('accounts', id);
+                    if (account) {
+                        let configClient = await this.setInstance(account);
+                        await accountSelect(account);
+                        configClient.account_selected = account.ID;
+                        await this.db.updateData('configClient', configClient);
                     }
                 }
             } catch (err) {
