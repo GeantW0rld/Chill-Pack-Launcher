@@ -1,10 +1,4 @@
 {
   "version": "1.20.1-forge-47.4.23",
-  "mods": [
-    {
-      "name": "JEI (Just Enough Items)",
-      "modId": 238222,
-      "fileId": 4567890
-    }
-  ]
+  "mods": []
 }
